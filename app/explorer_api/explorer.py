@@ -1,5 +1,10 @@
 from flask import Blueprint, jsonify
 from app.db.models import Article, ArticleVersion 
+from flask import request
+from sqlalchemy import func
+from app.db.models import db
+
+
 
 explorer = Blueprint("explorer", __name__)
 
@@ -81,4 +86,49 @@ def compare_article_versions(article_id):
 
     return jsonify(comparison), 200
 
+@explorer.route("/explorer/articles/search", methods=["GET"])
+def search_articles():
+    keyword = request.args.get("q", "").strip()
+    if not keyword:
+        return jsonify({"error": "Query parameter 'q' is required."}), 400
 
+    # Subquery to get the most recent version of each article
+    subquery = (
+        db.session.query(
+            ArticleVersion.article_id,
+            func.max(ArticleVersion.version_number).label("max_version")
+        )
+        .group_by(ArticleVersion.article_id)
+        .subquery()
+    )
+
+    # Join to get the latest version details
+    latest_versions = (
+        db.session.query(ArticleVersion)
+        .join(
+            subquery,
+            (ArticleVersion.article_id == subquery.c.article_id) &
+            (ArticleVersion.version_number == subquery.c.max_version)
+        )
+        .filter(
+            (ArticleVersion.headline.ilike(f"%{keyword}%")) |
+            (ArticleVersion.subheadline.ilike(f"%{keyword}%")) |
+            (ArticleVersion.full_text.ilike(f"%{keyword}%"))
+        )
+        .all()
+    )
+
+    result = [
+        {
+            "article_id": version.article_id,
+            "version_number": version.version_number,
+            "headline": version.headline,
+            "subheadline": version.subheadline,
+            "full_text": version.full_text,
+            "last_updated": version.last_updated.isoformat(),
+            "crawled_at": version.crawled_at.isoformat(),
+        }
+        for version in latest_versions
+    ]
+
+    return jsonify(result), 200
