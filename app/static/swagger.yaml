@@ -160,3 +160,43 @@ paths:
               error:
                 type: string
                 example: "Not enough versions to compare"
+
+  /explorer/articles/search:
+    get:
+      summary: "Search Articles"
+      description: "Search the most recent versions of all articles for a keyword in headline, subheadline, or full_text."
+      parameters:
+        - name: q
+          in: query
+          required: true
+          type: string
+          description: "Keyword to search for"
+      responses:
+        200:
+          description: "Search results"
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                article_id:
+                  type: integer
+                version_number:
+                  type: integer
+                headline:
+                  type: string
+                subheadline:
+                  type: string
+                full_text:
+                  type: string
+                last_updated:
+                  type: string
+                crawled_at:
+                  type: string
+        400:
+          description: "Missing keyword query parameter"
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
