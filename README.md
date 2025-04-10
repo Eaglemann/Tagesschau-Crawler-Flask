@@ -67,16 +67,7 @@ docker compose up
 ```
 
 
-### Step 4: Docker Setup (Optional)
-
-You can run the application with Docker for an isolated environment.
-
-```bash
-docker compose build
-docker compose up
-```
-
-### Step 5: Docker Setup (Optional)
+### Step 5: Test the app
 
 The app will be available at 
 ```bash
