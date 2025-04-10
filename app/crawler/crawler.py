@@ -84,13 +84,7 @@ def store_article_and_versions(article_data):
 
     # If article doesn't exist, create a new one with the extracted data
     if not article:
-        article = Article(
-            url=url,
-            headline=headline,
-            subheadline=subheadline,
-            full_text=full_text,
-            last_updated=last_updated
-        )
+        article = Article(url=url)
         db.session.add(article)
         db.session.commit()
         logging.info(f"New article created: {url}")
