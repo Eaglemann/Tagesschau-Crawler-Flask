@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+  web:
+    build: .
+    container_name: futureDemandCC
+    env_file:
+      - .env
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/app
+    restart: always
+    depends_on:
+      # - db  # Uncomment if you want local Postgres later
+      []
+
+  # Optional local Postgres (disabled for now)
+  # db:
+  #   image: postgres:15
+  #   container_name: postgres_local
+  #   environment:
+  #     POSTGRES_USER: your_user
+  #     POSTGRES_PASSWORD: your_pass
+  #     POSTGRES_DB: your_db
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - pgdata:/var/lib/postgresql/data
+# volumes:
+#   pgdata:
