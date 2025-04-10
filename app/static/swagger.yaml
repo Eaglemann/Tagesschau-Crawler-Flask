@@ -1,7 +1,8 @@
 swagger: "2.0"
 info:
   title: "FUTURE DEMAND CODING CHALLANGE"
-  description: "API for triggering article crawls and retrieving stored articles"
+  description: "API for triggering article crawls, retrieving stored articles,
+    retreive and compare versions, also search articles for a particular keyword and update the scheduler interval"
   version: "1.0.0"
 host: "localhost:5000"
 basePath: "/"
@@ -200,3 +201,41 @@ paths:
             properties:
               error:
                 type: string
+
+  /controller/scheduler/settings:
+    get:
+      summary: "Get the current scheduler settings."
+      description: "This endpoint retrieves the current scheduler settings, including whether it is enabled and the frequency of the scheduled crawl."
+      responses:
+        200:
+          description: "Current scheduler settings retrieved."
+          schema:
+            type: "object"
+            properties:
+              is_enabled:
+                type: "boolean"
+              frequency_hours:
+                type: "integer"
+        404:
+          description: "Scheduler settings not found."
+
+    post:
+      summary: "Update the scheduler settings."
+      description: "This endpoint allows updating the scheduler settings, including enabling/disabling the scheduler and adjusting the frequency."
+      parameters:
+        - name: "scheduler_settings"
+          in: "body"
+          description: "The scheduler settings to be updated."
+          required: true
+          schema:
+            type: "object"
+            properties:
+              is_enabled:
+                type: "boolean"
+              frequency_hours:
+                type: "integer"
+      responses:
+        200:
+          description: "Scheduler settings updated successfully."
+        400:
+          description: "Missing parameters or invalid data."
