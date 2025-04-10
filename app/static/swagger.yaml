@@ -1,0 +1,162 @@
+swagger: "2.0"
+info:
+  title: "FUTURE DEMAND CODING CHALLANGE"
+  description: "API for triggering article crawls and retrieving stored articles"
+  version: "1.0.0"
+host: "localhost:5000"
+basePath: "/"
+schemes:
+  - "http"
+paths:
+  /controller/crawl:
+    post:
+      summary: "Trigger Full Crawl"
+      description: "Triggers a full crawl of the articles"
+      responses:
+        200:
+          description: "Full crawl triggered"
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Full crawl triggered."
+  /controller/crawl/article:
+    post:
+      summary: "Trigger Article Crawl"
+      description: "Triggers a crawl for a single article"
+      parameters:
+        - name: url
+          in: body
+          required: true
+          description: "URL of the article"
+          schema:
+            type: object
+            properties:
+              url:
+                type: string
+                example: "https://www.tagesschau.de/wirtschaft/weltwirtschaft/eu-usa-zoelle-112.html"
+      responses:
+        200:
+          description: "Article crawled and stored."
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Article crawled and stored."
+        400:
+          description: "URL is required."
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: "URL is required"
+        500:
+          description: "Failed to crawl the article."
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: "Failed to crawl the article."
+  /explorer/articles:
+    get:
+      summary: "Get All Articles"
+      description: "Retrieves a list of all articles stored in the database"
+      responses:
+        200:
+          description: "List of articles"
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                url:
+                  type: string
+
+  /explorer/articles/{article_id}/versions:
+    get:
+      summary: "Get Versions of Article"
+      description: "Retrieves all versions of a specific article"
+      parameters:
+        - name: article_id
+          in: path
+          required: true
+          type: integer
+      responses:
+        200:
+          description: "List of article versions"
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                version_number:
+                  type: integer
+                headline:
+                  type: string
+                subheadline:
+                  type: string
+                last_updated:
+                  type: string
+                crawled_at:
+                  type: string
+        404:
+          description: "No versions found for this article"
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: "No versions found for this article"
+  /explorer/articles/{article_id}/compare:
+    get:
+      summary: "Compare Versions of Article"
+      description: "Compares the two latest versions of a specific article"
+      parameters:
+        - name: article_id
+          in: path
+          required: true
+          type: integer
+      responses:
+        200:
+          description: "Comparison of the two latest versions"
+          schema:
+            type: object
+            properties:
+              version_1:
+                type: object
+                properties:
+                  version_number:
+                    type: integer
+                  headline:
+                    type: string
+                  subheadline:
+                    type: string
+                  full_text:
+                    type: string
+              version_2:
+                type: object
+                properties:
+                  version_number:
+                    type: integer
+                  headline:
+                    type: string
+                  subheadline:
+                    type: string
+                  full_text:
+                    type: string
+        404:
+          description: "Not enough versions to compare"
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: "Not enough versions to compare"

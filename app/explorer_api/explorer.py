@@ -3,9 +3,7 @@ from app.db.models import Article, ArticleVersion
 
 explorer = Blueprint("explorer", __name__)
 
-@explorer.route("/explorer/health", methods=["GET"])
-def explorer_health():
-    return jsonify({"status": "Explorer API is running"}), 200
+
 
 @explorer.route("/explorer/articles", methods=["GET"])
 def list_articles():

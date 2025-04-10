@@ -10,6 +10,7 @@ dataclass-wizard==0.35.0
 Flask==3.1.0
 Flask-Migrate==4.1.0
 Flask-SQLAlchemy==3.1.1
+flask-swagger-ui==4.11.1
 greenlet==3.1.1
 h5py==3.13.0
 idna==3.4
@@ -43,6 +44,7 @@ six==1.16.0
 soupsieve==2.6
 SQLAlchemy==2.0.40
 tqdm==4.67.1
+turtle==0.0.1
 typing_extensions==4.12.2
 tzdata==2023.3
 tzlocal==5.3.1
