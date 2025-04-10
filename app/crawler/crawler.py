@@ -136,6 +136,7 @@ def store_article_and_versions(article_data):
 #Run the crawler to get the links from the overview page and then all individual articles
 def start_full_crawl ():
 
+    logging.info("Full crawl started at: %s", datetime.now())
     article_links = crawl_links_overview_page()
 
     for article_url in article_links:
