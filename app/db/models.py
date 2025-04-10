@@ -32,3 +32,13 @@ class ArticleVersion(db.Model):
     __table_args__ = (db.Index('ix_article_version_article_id_last_updated', 'article_id', 'last_updated'),)
 
 
+class SchedulerSettings(db.Model):
+    __tablename__ = 'scheduler_settings'
+
+    id = db.Column(db.Integer, primary_key=True)
+    frequency_hours = db.Column(db.Integer, nullable=False)  # Ensure this is Integer
+    is_enabled = db.Column(db.Boolean, nullable=False)
+
+    def __init__(self, frequency_hours, is_enabled):
+        self.frequency_hours = frequency_hours
+        self.is_enabled = is_enabled
