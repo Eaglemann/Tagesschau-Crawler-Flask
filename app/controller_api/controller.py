@@ -1,18 +1,37 @@
+"""
+This module handles all the logic for managing the crawling process and scheduling settings.
+
+- Triggers a full crawl of all articles.
+- Triggers the crawl of an individual article by its URL.
+- Retrieves and updates the scheduler settings for periodic crawling.
+"""
+
 from flask import Blueprint, jsonify, request
 from app.crawler.crawler import start_full_crawl, crawl_article_page, store_article_and_versions
 from app.db.models import SchedulerSettings, db
 
-
-
+# Blueprint to handle routes for crawling and scheduler settings
 controller = Blueprint("controller", __name__)
 
+# --- Trigger a full crawl of all articles ---
 @controller.route("/crawl", methods=["POST"])
 def trigger_full_crawl():
+    """
+    Triggers a full crawl of all articles. It calls the 'start_full_crawl' function,
+    which scrapes the overview page, fetches each article, and stores the data in the database.
+    """
     start_full_crawl()
     return jsonify({"message": "Full crawl triggered."}), 200
 
+
+# --- Trigger crawl of an individual article ---
 @controller.route("/crawl/article", methods=["POST"])
 def trigger_article_crawl():
+    """
+    Triggers the crawl of an individual article by its URL. The URL is passed as JSON in the request body.
+    The function fetches the article's content, extracts key data (headline, subheadline, body),
+    and stores it in the database if new or updated.
+    """
     data = request.get_json()
     url = data.get("url")
     if not url:
@@ -26,8 +45,18 @@ def trigger_article_crawl():
     return jsonify({"message": "Article crawled and stored."}), 200
 
 
+# --- Get or update scheduler settings ---
 @controller.route("/scheduler/settings", methods=["PUT", "GET"])
 def manage_scheduler_settings():
+    """
+    Manages the settings for the crawler's scheduling frequency and its enabled status.
+
+    - **GET**: Retrieves the current scheduler settings from the database. If none exist,
+      default settings are created (frequency: 1 hour, enabled: True).
+    - **PUT**: Updates the scheduler settings based on the provided JSON in the request body.
+      The settings include 'frequency_hours' (how often the crawl should occur) and 'is_enabled' 
+      (whether the scheduler is active).
+    """
     if request.method == "GET":
         # Get the current scheduler settings
         settings = SchedulerSettings.query.first()

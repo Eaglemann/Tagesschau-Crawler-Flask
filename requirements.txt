@@ -1,5 +1,7 @@
+alabaster==1.0.0
 alembic==1.15.2
 APScheduler==3.11.0
+babel==2.17.0
 beautifulsoup4==4.13.3
 blinker==1.9.0
 certifi==2023.5.7
@@ -7,6 +9,7 @@ charset-normalizer==3.1.0
 click==8.1.8
 colorama==0.4.6
 dataclass-wizard==0.35.0
+docutils==0.21.2
 Flask==3.1.0
 Flask-Migrate==4.1.0
 Flask-SQLAlchemy==3.1.1
@@ -14,6 +17,7 @@ flask-swagger-ui==4.11.1
 greenlet==3.1.1
 h5py==3.13.0
 idna==3.4
+imagesize==1.4.1
 iniconfig==2.1.0
 itsdangerous==2.2.0
 Jinja2==3.1.6
@@ -29,6 +33,7 @@ pandas==2.0.2
 pillow==11.1.0
 pluggy==1.5.0
 psycopg2-binary==2.9.10
+Pygments==2.19.1
 PyQt5==5.15.9
 PyQt5-Qt5==5.15.2
 PyQt5-sip==12.12.1
@@ -39,9 +44,20 @@ python-dotenv==1.1.0
 pytz==2023.3
 PyYAML==6.0
 requests==2.31.0
+roman-numerals-py==3.1.0
 scipy==1.15.2
 six==1.16.0
+snowballstemmer==2.2.0
 soupsieve==2.6
+Sphinx==8.2.3
+sphinx-autodoc-typehints==3.1.0
+sphinxcontrib-applehelp==2.0.0
+sphinxcontrib-devhelp==2.0.0
+sphinxcontrib-htmlhelp==2.1.0
+sphinxcontrib-httpdomain==1.8.1
+sphinxcontrib-jsmath==1.0.1
+sphinxcontrib-qthelp==2.0.0
+sphinxcontrib-serializinghtml==2.0.0
 SQLAlchemy==2.0.40
 tqdm==4.67.1
 turtle==0.0.1

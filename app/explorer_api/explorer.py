@@ -1,17 +1,29 @@
-from flask import Blueprint, jsonify
-from app.db.models import Article, ArticleVersion 
-from flask import request
+"""
+This module defines the routes for exploring articles and their versions.
+
+- **/explorer/articles**: Lists all articles in the system.
+- **/explorer/articles/<article_id>/versions**: Retrieves all versions of a specific article.
+- **/explorer/articles/<article_id>/compare**: Compares the two most recent versions of a specific article.
+- **/explorer/articles/search**: Searches for articles based on keywords in the headline, subheadline, or full text of their latest versions.
+"""
+
+from flask import Blueprint, jsonify, request
+from app.db.models import Article, ArticleVersion
 from sqlalchemy import func
 from app.db.models import db
 
-
-
+# Initialize the blueprint for exploring articles
 explorer = Blueprint("explorer", __name__)
 
-
-
+# --- Route to List All Articles ---
 @explorer.route("/explorer/articles", methods=["GET"])
 def list_articles():
+    """
+    Retrieves all articles in the database.
+
+    Returns a list of articles with their ID and URL.
+
+    """
     articles = Article.query.all()
     result = [
         {
@@ -23,8 +35,16 @@ def list_articles():
     return jsonify(result), 200
 
 
+# --- Route to Get Versions of an Article ---
 @explorer.route("/explorer/articles/<int:article_id>/versions", methods=["GET"])
 def get_article_versions(article_id):
+    """
+    Retrieves all versions of a specific article based on its ID.
+
+    Returns a list of versions with their ID, version number, headline, subheadline, 
+    last update time, and crawl timestamp.
+
+    """
     versions = (
         ArticleVersion.query
         .filter_by(article_id=article_id)
@@ -49,18 +69,25 @@ def get_article_versions(article_id):
     return jsonify(result), 200
 
 
+# --- Route to Compare Two Versions of an Article ---
 @explorer.route("/explorer/articles/<int:article_id>/compare", methods=["GET"])
 def compare_article_versions(article_id):
+    """
+    Compares the two most recent versions of a specific article.
+
+    Returns the details of both versions for comparison, including headline, subheadline, 
+    and full text for each version.
+
+    """
     # Get the two latest versions for the article
     latest_versions = (
         ArticleVersion.query
         .filter_by(article_id=article_id)
         .order_by(ArticleVersion.version_number.desc())
-        .limit(2)  # Here it is limited to 2 most recent versions
+        .limit(2)  # Limited to 2 most recent versions
         .all()
     )
 
-    # If less than two versions are found cant compare and return an error
     if len(latest_versions) < 2:
         return jsonify({"error": "Not enough versions to compare"}), 404
 
@@ -86,8 +113,16 @@ def compare_article_versions(article_id):
 
     return jsonify(comparison), 200
 
+
+# --- Route to Search Articles ---
 @explorer.route("/explorer/articles/search", methods=["GET"])
 def search_articles():
+    """
+    Searches for articles based on a keyword in the latest version's headline, subheadline, or full text.
+
+    Accepts the query parameter 'q' to search for articles that match the keyword.
+
+    """
     keyword = request.args.get("q", "").strip()
     if not keyword:
         return jsonify({"error": "Query parameter 'q' is required."}), 400
@@ -107,7 +142,7 @@ def search_articles():
         db.session.query(ArticleVersion)
         .join(
             subquery,
-            (ArticleVersion.article_id == subquery.c.article_id) &
+            (ArticleVersion.article_id == subquery.c.article_id) & 
             (ArticleVersion.version_number == subquery.c.max_version)
         )
         .filter(
