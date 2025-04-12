@@ -26,7 +26,7 @@ def trigger_article_crawl():
     return jsonify({"message": "Article crawled and stored."}), 200
 
 
-@controller.route("/scheduler/settings", methods=["POST", "GET"])
+@controller.route("/scheduler/settings", methods=["PUT", "GET"])
 def manage_scheduler_settings():
     if request.method == "GET":
         # Get the current scheduler settings
@@ -39,7 +39,7 @@ def manage_scheduler_settings():
 
         return jsonify({"frequency_hours": settings.frequency_hours, "is_enabled": settings.is_enabled}), 200
 
-    elif request.method == "POST":
+    elif request.method == "PUT":
         # Update scheduler settings
         data = request.get_json()
 

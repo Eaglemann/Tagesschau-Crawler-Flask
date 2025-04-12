@@ -219,7 +219,7 @@ paths:
         404:
           description: "Scheduler settings not found."
 
-    post:
+    put:
       summary: "Update the scheduler settings."
       description: "This endpoint allows updating the scheduler settings, including enabling/disabling the scheduler and adjusting the frequency."
       parameters:
