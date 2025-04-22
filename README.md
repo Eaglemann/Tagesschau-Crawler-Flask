@@ -1,4 +1,4 @@
-# FutureDemand-CC
+# Tagesschau Crawler
 
 This is a web scraping and article versioning application built with Flask, PostgreSQL, Docker, and various Python libraries. The application crawls news articles, stores them in a PostgreSQL database, and tracks versions of articles whenever changes occur. Additionally, it provides an API for triggering crawls and retrieving stored articles.
 
